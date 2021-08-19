@@ -1,31 +1,26 @@
 package com.example.openmobiliser.ui.map
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.openmobiliser.R
 import com.example.openmobiliser.databinding.FragmentMapBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.views.MapView
-import org.osmdroid.config.Configuration.*
+import com.example.openmobiliser.ui.submission.SubmissionFragment
 import org.osmdroid.util.GeoPoint
-import java.util.prefs.Preferences
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 
 class MapFragment : Fragment() {
 
     private lateinit var galleryViewModel: MapViewModel
     private lateinit var map: MapView
     private var _binding: FragmentMapBinding? = null
-    private val REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -42,16 +37,12 @@ class MapFragment : Fragment() {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textGallery
-        galleryViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-
         val fab: View = binding.fab
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .show()
+            childFragmentManager.beginTransaction().apply {
+                replace(R.id.map_fragment_container,SubmissionFragment())
+                commit()
+            }
         }
 
         map = binding.map
@@ -59,6 +50,7 @@ class MapFragment : Fragment() {
         mapController.setZoom(15.0)
         val startPoint = GeoPoint(1.3521, 103.8198)
         mapController.setCenter(startPoint)
+
         return root
     }
 

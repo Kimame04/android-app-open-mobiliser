@@ -12,4 +12,9 @@
     <string name="menu_settings">Settings</string>
 
     <string name="fab">Submit</string>
+    
+    <string name="submission_title">Title</string>
+    <string name="submission_desc">Description</string>
+    <string name="submission_title_desc">Give the location a succinct name</string>
+    <string name="submission_desc_desc">How to get to it, things to note etc</string>
 </resources>
