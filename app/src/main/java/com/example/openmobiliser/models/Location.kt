@@ -1,8 +1,8 @@
 package com.example.openmobiliser.models
 
-data class MapSubmission(
+data class Location(
     val title: String = "",
     val description: String = "",
-    val lat: Long,
-    val long: Long
+    val lat: Double,
+    val long: Double
 )
