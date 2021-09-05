@@ -1,53 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/submission_fragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".ui.submission.SubmissionFragment"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/cardview_light_background">
-    <data>
-        <variable
-            name="text"
-            type="com.example.openmobiliser.ui.submission.SubmissionViewModel" />
-    </data>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/submission_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/test_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:hint="@string/submission_title"
-                    android:text="@={text.title}"
-                    android:contentDescription="@string/submission_title_desc"/>
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:hint="@string/submission_desc"
-                    android:text="@={text.description}"
-                    android:contentDescription="@string/submission_desc_desc"/>
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/confirm_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_baseline_check_24"
-            />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</layout>
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="title"/>
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/test_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/test_title"
+        android:hint="description"/>
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/test_lat"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/test_desc"
+        android:gravity="start"
+        android:hint="latitude"/>
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/test_long"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/test_desc"
+        android:gravity="end"
+        android:hint="longitude"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/confirm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_baseline_check_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
