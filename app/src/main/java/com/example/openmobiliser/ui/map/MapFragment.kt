@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.openmobiliser.BuildConfig
@@ -52,14 +53,16 @@ class MapFragment : Fragment(), OnMapReadyCallback{
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        /*
         val fab: View = binding.fab
         fab.setOnClickListener { view ->
-            view.isVisible = false
-            childFragmentManager.beginTransaction().apply {
-                replace(R.id.map_fragment_container,SubmissionFragment())
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.map,SubmissionFragment())
+                setTransition(TRANSIT_FRAGMENT_OPEN)
                 commit()
             }
-        }
+
+        }*/
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
@@ -73,12 +76,31 @@ class MapFragment : Fragment(), OnMapReadyCallback{
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        val sydney = LatLng(-33.852, 151.211)
-        googleMap.addMarker(
-            MarkerOptions()
-                .position(sydney)
-                .title("Marker in Sydney")
-        )
+        val locations = Firebase.firestore.collection("locations")
+
+        locations.get().addOnSuccessListener { result ->
+            for (document in result){
+                googleMap.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(document.get("lat") as Double,
+                            document.get("long") as Double
+                        ))
+                        .title(document.get("title") as String?)
+                )
+            }
+            Toast.makeText(this.context, "data retrieved successfully", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener{ exception ->
+            Toast.makeText(this.context, "failed to retrieve data", Toast.LENGTH_SHORT).show()
+        }
+
+        googleMap.setOnMapLongClickListener { result ->
+            val location = Location("temp","temp",result.latitude,result.longitude)
+            locations.document().set(location)
+            googleMap.addMarker(
+                MarkerOptions().position(result).title(location.title)
+            )
+        }
+
     }
 
 }

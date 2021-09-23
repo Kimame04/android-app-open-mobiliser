@@ -28,6 +28,8 @@ class SubmissionFragment: Fragment() {
     ): View? {
         submissionViewModel = SubmissionViewModel()
         _binding = FragmentSubmissionBinding.inflate(inflater,container,false)
+
+        container?.clearDisappearingChildren()
         val root: View = binding.root
 
         val locations = Firebase.firestore.collection("locations")
