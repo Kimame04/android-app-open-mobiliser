@@ -1,6 +1,7 @@
 package com.example.openmobiliser.ui.map
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.openmobiliser.BuildConfig
 import com.example.openmobiliser.R
 import com.example.openmobiliser.databinding.FragmentMapBinding
 import com.example.openmobiliser.models.Location
@@ -59,8 +61,8 @@ class MapFragment : Fragment(), OnMapReadyCallback{
             }
         }
 
-        val map = binding.map
-        map.getMapAsync(this)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)
 
         return root
     }
