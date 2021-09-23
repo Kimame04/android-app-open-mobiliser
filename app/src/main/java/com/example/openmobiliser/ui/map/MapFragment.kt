@@ -1,5 +1,6 @@
 package com.example.openmobiliser.ui.map
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,9 +16,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.openmobiliser.BuildConfig
 import com.example.openmobiliser.R
+import com.example.openmobiliser.SubmitActivity
 import com.example.openmobiliser.databinding.FragmentMapBinding
 import com.example.openmobiliser.models.Location
-import com.example.openmobiliser.ui.submission.SubmissionFragment
+import com.example.openmobiliser.models.Locations
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -76,29 +78,22 @@ class MapFragment : Fragment(), OnMapReadyCallback{
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        val locations = Firebase.firestore.collection("locations")
+        val locations = Locations.get()
 
-        locations.get().addOnSuccessListener { result ->
-            for (document in result){
-                googleMap.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(document.get("lat") as Double,
-                            document.get("long") as Double
-                        ))
-                        .title(document.get("title") as String?)
+        for (loc in locations){
+            googleMap.addMarker(MarkerOptions()
+                .position(
+                    LatLng(loc.lat,loc.long),
                 )
-            }
-            Toast.makeText(this.context, "data retrieved successfully", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener{ exception ->
-            Toast.makeText(this.context, "failed to retrieve data", Toast.LENGTH_SHORT).show()
+                .title(loc.title)
+            )
         }
 
         googleMap.setOnMapLongClickListener { result ->
-            val location = Location("temp","temp",result.latitude,result.longitude)
-            locations.document().set(location)
-            googleMap.addMarker(
-                MarkerOptions().position(result).title(location.title)
-            )
+            val intent = Intent(activity, SubmitActivity::class.java)
+                .putExtra("lat",result.latitude)
+                .putExtra("long",result.longitude)
+            startActivity(intent)
         }
 
     }
