@@ -3,6 +3,10 @@ For Tech For Good Festival 2021, by Open Enablers
 
 ## Changelog
 
+### 2021/09/23
+- Used press-and-hold for submission
+- Maps issue is fixed
+
 ### 2021/09/06
 - Changed the layout of the Map Fragment
 - Used Maps SDK though not fully functional
