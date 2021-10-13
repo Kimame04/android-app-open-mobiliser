@@ -1,5 +1,7 @@
 package com.example.openmobiliser.models
 
+import java.io.Serializable
+
 data class Location(
     val title: String = "",
     val description: String = "",
@@ -8,4 +10,4 @@ data class Location(
     val tags: ArrayList<String>,
     val accepts: Long,
     val disputes: Long
-)
+): Serializable

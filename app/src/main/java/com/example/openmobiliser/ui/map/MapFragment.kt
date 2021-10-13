@@ -6,19 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.*
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.openmobiliser.BuildConfig
+import com.example.openmobiliser.InfoActivity
 import com.example.openmobiliser.R
 import com.example.openmobiliser.SubmitActivity
 import com.example.openmobiliser.databinding.FragmentMapBinding
-import com.example.openmobiliser.models.Location
 import com.example.openmobiliser.models.Locations
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,11 +20,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
+import java.io.Serializable
 
 class MapFragment : Fragment(), OnMapReadyCallback{
 
@@ -54,18 +45,6 @@ class MapFragment : Fragment(), OnMapReadyCallback{
 
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        /*
-        val fab: View = binding.fab
-        fab.setOnClickListener { view ->
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.map,SubmissionFragment())
-                setTransition(TRANSIT_FRAGMENT_OPEN)
-                commit()
-            }
-
-        }*/
-
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
@@ -80,19 +59,25 @@ class MapFragment : Fragment(), OnMapReadyCallback{
     override fun onMapReady(googleMap: GoogleMap) {
         val locations = Locations.get()
 
-        for (loc in locations){
+        locations.forEach {
             googleMap.addMarker(MarkerOptions()
                 .position(
-                    LatLng(loc.lat,loc.long),
+                    LatLng(it.lat,it.long),
                 )
-                .title(loc.title)
-            )
+                .title(it.title)
+            ).tag = it
         }
 
         googleMap.setOnMapLongClickListener { result ->
             val intent = Intent(activity, SubmitActivity::class.java)
                 .putExtra("lat",result.latitude)
                 .putExtra("long",result.longitude)
+            startActivity(intent)
+        }
+
+        googleMap.setOnInfoWindowClickListener { marker ->
+            val intent = Intent(activity, InfoActivity::class.java)
+                .putExtra("marker", marker.tag as Serializable)
             startActivity(intent)
         }
 

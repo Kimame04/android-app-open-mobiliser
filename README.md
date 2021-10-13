@@ -3,6 +3,12 @@ For Tech For Good Festival 2021, by Open Enablers
 
 ## Changelog
 
+### 2021/10/13
+- Added click info window for more details
+
+### 2021/10/07
+- Added image, disputes and confirm attributes
+
 ### 2021/09/23
 - Used press-and-hold for submission
 - Maps issue is fixed
