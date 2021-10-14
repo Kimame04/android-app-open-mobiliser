@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
         Locations.retrieveLocations()
+        Locations.retrieveImages()
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
