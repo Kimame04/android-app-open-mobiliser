@@ -34,6 +34,7 @@ import java.util.ArrayList
 import java.util.jar.Manifest
 import android.app.Activity
 import android.os.Build
+import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 
 
 class DashboardFragment : Fragment() {
@@ -43,6 +44,7 @@ class DashboardFragment : Fragment() {
     private var count = 0
     private var currLat = 0.0
     private var currLon = 0.0
+    private val CODE = 101
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -79,15 +81,20 @@ class DashboardFragment : Fragment() {
 
 
         var loc = android.location.Location("")
-        loc.longitude = 0.0
-        loc.latitude = 0.0
+
+        Log.d("test",
+            context?.packageManager?.hasSystemFeature(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                .toString()
+        )
         if (ContextCompat.checkSelfPermission(requireActivity(),android.Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
             val locationManager = context?.getSystemService(LOCATION_SERVICE) as LocationManager
             loc = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)!!
+        } else{
+            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), CODE)
+            loc.longitude = 0.0
+            loc.latitude = 0.0
         }
-
-
 
         Locations.getCategories().forEach {
             val chip = Chip(context)

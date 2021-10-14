@@ -1,6 +1,7 @@
 package com.example.openmobiliser
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -23,6 +24,17 @@ import com.google.firebase.ktx.Firebase
 import java.io.ByteArrayOutputStream
 import java.net.URI
 import java.util.*
+import com.firebase.ui.storage.images.FirebaseImageLoader
+
+import com.google.firebase.storage.StorageReference
+
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Registry
+import com.bumptech.glide.annotation.GlideModule
+
+import com.bumptech.glide.module.AppGlideModule
+import java.io.InputStream
+
 
 class SubmitActivity : AppCompatActivity() {
 
@@ -59,6 +71,8 @@ class SubmitActivity : AppCompatActivity() {
                 strings.add(chip.text as String)
             }
 
+            val name = UUID.randomUUID().toString()
+
             val loc = Location(
                 title.text.toString(),
                 desc.text.toString(),
@@ -67,10 +81,10 @@ class SubmitActivity : AppCompatActivity() {
                 strings,
                 1,
                 1,
-                "image/"+ UUID.randomUUID().toString()+".jpg"
+                name
             )
             Firebase.firestore.collection("locations").document().set(loc)
-            Locations.getImageRef().putFile(filePath!!)
+            Locations.getImageRef().child(name).putFile(filePath)
 
             finish()
         }

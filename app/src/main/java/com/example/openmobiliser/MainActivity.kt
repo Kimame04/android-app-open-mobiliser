@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 101
+    private val PERMISSIONS_REQUEST_ACCESS_LOCATION = 101
     private var locationPermissionGranted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,16 +79,16 @@ class MainActivity : AppCompatActivity() {
             locationPermissionGranted = true
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+                PERMISSIONS_REQUEST_ACCESS_LOCATION)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>,
                                             grantResults: IntArray) {
-        locationPermissionGranted = false
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
+            PERMISSIONS_REQUEST_ACCESS_LOCATION -> {
 
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() &&

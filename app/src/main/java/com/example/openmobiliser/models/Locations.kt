@@ -41,7 +41,7 @@ class Locations {
         }
 
         fun retrieveImages(){
-            images = FirebaseStorage.getInstance().reference.child("images")
+            images = FirebaseStorage.getInstance().reference
         }
 
         fun get(): ArrayList<Location> {
