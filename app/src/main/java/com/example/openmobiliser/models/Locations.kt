@@ -13,7 +13,7 @@ import java.util.ArrayList
 
 class Locations {
     companion object {
-        private lateinit var locations: CollectionReference
+        lateinit var locations: CollectionReference
         private lateinit var images: StorageReference
         private var list = ArrayList<Location>()
         private val cats = arrayOf("Lift", "Ramp", "Inaccessible")
@@ -31,9 +31,11 @@ class Locations {
                         document.get("tags") as ArrayList<String>,
                         document.get("accepts") as Long,
                         document.get("disputes") as Long,
-                        document.get("imageRef") as String
+                        document.get("imageRef") as String,
+                        document.get("id") as String
                     )
-                    list.add(loc)
+                    if (loc.accepts.toDouble() / (loc.accepts.toDouble() + loc.disputes.toDouble()) > 0.2)
+                        list.add(loc)
                 }
             }.addOnFailureListener{ exception ->
             }

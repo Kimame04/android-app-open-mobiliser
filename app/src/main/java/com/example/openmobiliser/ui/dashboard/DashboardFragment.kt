@@ -33,8 +33,12 @@ import com.google.firebase.ktx.Firebase
 import java.util.ArrayList
 import java.util.jar.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
+import androidx.transition.Visibility
+import com.example.openmobiliser.InfoActivity
+import com.example.openmobiliser.SubmitActivity
 
 
 class DashboardFragment : Fragment() {
@@ -64,17 +68,7 @@ class DashboardFragment : Fragment() {
         val num = binding.dashNum
         val progressBar = binding.dashBar
         val nearest = binding.dashNearest
-
-        /*
-        val text: TextView = binding.displayText
-
-        val list = Locations.get()
-        for (item in list){
-            val title = item.title
-            text.append(title as CharSequence?)
-            text.append("\n")
-        }
-         */
+        val btn = binding.dashBtn
 
         progressBar.setProgress(0,true)
         num.setText("0")
@@ -110,7 +104,17 @@ class DashboardFragment : Fragment() {
                         if (calcDistance(it, loc!!) < calcDistance(min, loc)) min = it
                     }
                     nearest.setText(min.title + "\n" + min.description)
-                } else nearest.setText("")
+                    btn.visibility = View.VISIBLE
+                    btn.setText("Visit")
+                    btn.setOnClickListener{
+                        val intent = Intent(activity, InfoActivity::class.java)
+                            .putExtra("marker",min)
+                        startActivity(intent)
+                    }
+                } else{
+                    nearest.setText("")
+                    btn.visibility = View.GONE
+                }
                 num.setText(locs.size.toString())
                 progressBar.setProgress(locs.size * 10, true)
             }

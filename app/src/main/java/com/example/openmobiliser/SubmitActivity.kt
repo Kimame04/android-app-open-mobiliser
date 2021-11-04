@@ -77,10 +77,10 @@ class SubmitActivity : AppCompatActivity() {
             cg.checkedChipIds.forEach {
                 val chip = findViewById<Chip>(it)
                 strings.add(chip.text as String)
-                Log.d("test","tet")
             }
 
-            val name = UUID.randomUUID().toString()
+            val imageref = UUID.randomUUID().toString()
+            val id = UUID.randomUUID().toString()
 
             if(cg.checkedChipIds.size == 0 || title.text.toString() == "" || desc.text.toString() == ""
                 || imageView.drawable == null)
@@ -95,10 +95,11 @@ class SubmitActivity : AppCompatActivity() {
                     strings,
                     1,
                     1,
-                    name
+                    imageref,
+                    id
                 )
-                Firebase.firestore.collection("locations").document().set(loc)
-                Locations.getImageRef().child(name).putFile(filePath)
+                Firebase.firestore.collection("locations").document(id).set(loc)
+                Locations.getImageRef().child(imageref).putFile(filePath)
 
                 finish()
             }

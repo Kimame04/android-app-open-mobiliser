@@ -10,5 +10,6 @@ data class Location(
     val tags: ArrayList<String>,
     val accepts: Long,
     val disputes: Long,
-    val imageRef: String
+    val imageRef: String,
+    val id: String
 ): Serializable

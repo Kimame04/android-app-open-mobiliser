@@ -15,8 +15,10 @@ import com.example.openmobiliser.models.Locations
 import com.firebase.ui.storage.images.FirebaseImageLoader
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.storage.StorageReference
 import java.io.InputStream
+import kotlin.math.roundToInt
 
 class InfoActivity : AppCompatActivity() {
     /*
@@ -50,15 +52,30 @@ class InfoActivity : AppCompatActivity() {
         val confirmBtn = findViewById<View>(R.id.display_confirm)
         val disputeBtn = findViewById<View>(R.id.display_dispute)
         val image = findViewById<ImageView>(R.id.display_image)
+        val ratio = findViewById<TextView>(R.id.display_ratio)
 
         title.setText(data.title)
         desc.setText(data.description)
+        ratio.setText("Rating: " +
+                (100 * data.accepts.toDouble() /(data.accepts.toDouble() + data.disputes.toDouble())).roundToInt()
+                + "%"
+        )
         val ref = Locations.getImageRef().child(data.imageRef)
         Glide.with(applicationContext).load(ref).into(image)
         data.tags.forEach {
             val chip: Chip = Chip(this)
             chip.setText(it)
             chipGrp.addView(chip)
+        }
+
+        confirmBtn.setOnClickListener {
+            Locations.locations.document(data.id).update("accepts", FieldValue.increment(1))
+            finish()
+        }
+
+        disputeBtn.setOnClickListener {
+            Locations.locations.document(data.id).update("disputes", FieldValue.increment(1))
+            finish()
         }
 
     }
