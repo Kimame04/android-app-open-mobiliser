@@ -100,7 +100,7 @@ class SubmitActivity : AppCompatActivity() {
                 )
                 Firebase.firestore.collection("locations").document(id).set(loc)
                 Locations.getImageRef().child(imageref).putFile(filePath)
-
+                Locations.retrieveLocations()
                 finish()
             }
         }

@@ -70,11 +70,13 @@ class InfoActivity : AppCompatActivity() {
 
         confirmBtn.setOnClickListener {
             Locations.locations.document(data.id).update("accepts", FieldValue.increment(1))
+            Locations.retrieveLocations()
             finish()
         }
 
         disputeBtn.setOnClickListener {
             Locations.locations.document(data.id).update("disputes", FieldValue.increment(1))
+            Locations.retrieveLocations()
             finish()
         }
 

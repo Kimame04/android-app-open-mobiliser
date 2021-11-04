@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -20,6 +21,9 @@ import com.example.openmobiliser.models.Locations
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import java.util.jar.Manifest
+import android.content.Intent
+import android.net.Uri
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,6 +64,21 @@ class MainActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_settings){
+            val emailIntent = Intent(Intent.ACTION_SENDTO)
+                .setType("text/html")
+                .setData(Uri.parse("mailto:"))
+                .putExtra(Intent.EXTRA_SUBJECT, "Feedback on Open Mobilisers")
+                .putExtra(Intent.EXTRA_TEXT,"Enter text here (feature request, bug report etc)")
+                .putExtra(Intent.EXTRA_EMAIL,arrayOf("mendozakyan@gmail.com"))
+            startActivity(Intent.createChooser(emailIntent, "Send email"))
+            return true
+        } else{
+            return super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
