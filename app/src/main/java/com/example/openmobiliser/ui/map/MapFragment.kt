@@ -14,6 +14,7 @@ import com.example.openmobiliser.R
 import com.example.openmobiliser.SubmitActivity
 import com.example.openmobiliser.databinding.FragmentMapBinding
 import com.example.openmobiliser.models.Locations
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -58,6 +59,9 @@ class MapFragment : Fragment(), OnMapReadyCallback{
 
     override fun onMapReady(googleMap: GoogleMap) {
         val locations = Locations.get()
+
+        val sg = LatLng(1.3521,103.8198)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sg,15.0f))
 
         locations.forEach {
             googleMap.addMarker(MarkerOptions()

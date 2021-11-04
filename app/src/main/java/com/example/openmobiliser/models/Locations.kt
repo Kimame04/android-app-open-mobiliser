@@ -16,7 +16,7 @@ class Locations {
         private lateinit var locations: CollectionReference
         private lateinit var images: StorageReference
         private var list = ArrayList<Location>()
-        private val cats = arrayOf("Category 1", "Category 2", "Category 3")
+        private val cats = arrayOf("Lift", "Ramp", "Inaccessible")
 
         fun retrieveLocations(){
             list.clear()

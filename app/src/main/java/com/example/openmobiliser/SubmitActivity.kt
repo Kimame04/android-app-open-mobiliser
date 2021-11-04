@@ -33,6 +33,7 @@ import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
 
 import com.bumptech.glide.module.AppGlideModule
+import com.google.android.material.snackbar.Snackbar
 import java.io.InputStream
 
 
@@ -63,30 +64,44 @@ class SubmitActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_CODE)
         }
 
+        Locations.getCategories().forEach {
+            val chip = Chip(this@SubmitActivity)
+            chip.setText(it)
+            cg.addView(chip)
+            chip.isCheckable = true
+        }
+
         btn.setOnClickListener {
             strings = ArrayList<String>()
 
             cg.checkedChipIds.forEach {
                 val chip = findViewById<Chip>(it)
                 strings.add(chip.text as String)
+                Log.d("test","tet")
             }
 
             val name = UUID.randomUUID().toString()
 
-            val loc = Location(
-                title.text.toString(),
-                desc.text.toString(),
-                data?.get("lat") as Double,
-                data?.get("long") as Double,
-                strings,
-                1,
-                1,
-                name
-            )
-            Firebase.firestore.collection("locations").document().set(loc)
-            Locations.getImageRef().child(name).putFile(filePath)
+            if(cg.checkedChipIds.size == 0 || title.text.toString() == "" || desc.text.toString() == ""
+                || imageView.drawable == null)
+                    Snackbar.make(window.decorView.rootView,"Invalid input",Snackbar.LENGTH_SHORT).show()
+            else {
 
-            finish()
+                val loc = Location(
+                    title.text.toString(),
+                    desc.text.toString(),
+                    data?.get("lat") as Double,
+                    data?.get("long") as Double,
+                    strings,
+                    1,
+                    1,
+                    name
+                )
+                Firebase.firestore.collection("locations").document().set(loc)
+                Locations.getImageRef().child(name).putFile(filePath)
+
+                finish()
+            }
         }
     }
 

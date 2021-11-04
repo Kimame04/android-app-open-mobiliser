@@ -82,10 +82,6 @@ class DashboardFragment : Fragment() {
 
         var loc = android.location.Location("")
 
-        Log.d("test",
-            context?.packageManager?.hasSystemFeature(android.Manifest.permission.ACCESS_FINE_LOCATION)
-                .toString()
-        )
         if (ContextCompat.checkSelfPermission(requireActivity(),android.Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
             val locationManager = context?.getSystemService(LOCATION_SERVICE) as LocationManager
