@@ -75,7 +75,7 @@ class MapFragment : Fragment(), OnMapReadyCallback{
             .addOnSuccessListener { location : Location? ->
                 // Got last known location. In some rare situations this can be null.
                 val loc = LatLng(location!!.latitude,location.longitude)
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,20.0f))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,15.0f))
                 googleMap.addMarker(MarkerOptions()
                     .position(
                         LatLng(location.latitude,location.longitude),

@@ -61,7 +61,16 @@ class InfoActivity : AppCompatActivity() {
                 + "%"
         )
         val ref = Locations.getImageRef().child(data.imageRef)
-        Glide.with(applicationContext).load(ref).into(image)
+        ref.downloadUrl.addOnSuccessListener {
+            println("download")
+            //image.setImageURI(it)
+            Glide.with(applicationContext).load(it).into(image)
+            println("download successful")
+        }.addOnFailureListener{
+            println("failed")
+        }
+        //Glide.with(applicationContext).load(ref).into(image)
+
         data.tags.forEach {
             val chip: Chip = Chip(this)
             chip.setText(it)
