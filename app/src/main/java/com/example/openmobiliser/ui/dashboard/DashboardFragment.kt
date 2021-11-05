@@ -36,9 +36,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
+import androidx.core.view.forEach
 import androidx.transition.Visibility
 import com.example.openmobiliser.InfoActivity
 import com.example.openmobiliser.SubmitActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 
 class DashboardFragment : Fragment() {
@@ -49,6 +52,8 @@ class DashboardFragment : Fragment() {
     private var currLat = 0.0
     private var currLon = 0.0
     private val CODE = 101
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var loc: LatLng
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -73,18 +78,15 @@ class DashboardFragment : Fragment() {
         progressBar.setProgress(0,true)
         num.setText("0")
 
-
-        var loc = android.location.Location("")
-
-        if (ContextCompat.checkSelfPermission(requireActivity(),android.Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
-            val locationManager = context?.getSystemService(LOCATION_SERVICE) as LocationManager
-            loc = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)!!
-        } else{
-            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), CODE)
-            loc.longitude = 0.0
-            loc.latitude = 0.0
-        }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location : android.location.Location? ->
+                // Got last known location. In some rare situations this can be null.
+                loc = LatLng(location!!.latitude,location!!.longitude)
+            }
+            .addOnFailureListener {
+                loc = LatLng(1.3521,103.8198)
+            }
 
         Locations.getCategories().forEach {
             val chip = Chip(context)
@@ -101,7 +103,7 @@ class DashboardFragment : Fragment() {
                 if (locs.size > 0) {
                     var min = locs.get(0)
                     locs.forEach {
-                        if (calcDistance(it, loc!!) < calcDistance(min, loc)) min = it
+                        if (calcDistance(it, loc) < calcDistance(min, loc)) min = it
                     }
                     nearest.setText(min.title + "\n" + min.description)
                     btn.visibility = View.VISIBLE
@@ -128,7 +130,7 @@ class DashboardFragment : Fragment() {
         _binding = null
     }
 
-    fun calcDistance(loc1: Location, loc2: android.location.Location): Double{
+    fun calcDistance(loc1: Location, loc2: LatLng): Double{
         val lat1 = loc1.lat
         val lon1 = loc1.long
         val lat2 = loc2.latitude
@@ -137,18 +139,6 @@ class DashboardFragment : Fragment() {
         val x: Double = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2)
         val y: Double = lat2 - lat1
         return Math.sqrt(x * x + y * y) * R
-    }
-
-    private val locationListener: LocationListener = object : LocationListener {
-
-        override fun onLocationChanged(p0: android.location.Location) {
-            currLat = p0.latitude
-            currLon = p0.longitude
-        }
-
-        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-        override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
     }
 
 }
